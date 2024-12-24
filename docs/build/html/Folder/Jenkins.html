@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jenkins &mdash; Whanos-Documentation 2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=6fefd858"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Whanos-Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Folder</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Whanos.html">Whanos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Images.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Kubernetes.html">Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Kubernetes.html#example">Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Whanos-Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Jenkins</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Folder/Jenkins.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="jenkins">
+<h1>Jenkins<a class="headerlink" href="#jenkins" title="Link to this heading"></a></h1>
+<p>This documentation provides a complete guide to configuring and testing a Jenkins infrastructure capable of managing Docker builds and Kubernetes deployments.</p>
+</section>
+<section id="prerequisites">
+<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><em>Operating System</em>: Ubuntu 20.04+ or equivalent</p></li>
+<li><p><em>Required Tools</em>:
+- Docker
+- Jenkins
+- Ansible
+- Kubernetes (Minikube or remote cluster)
+- Git</p></li>
+</ul>
+<section id="tool-installation">
+<h2>Tool Installation<a class="headerlink" href="#tool-installation" title="Link to this heading"></a></h2>
+<p>Automate the installation of required tools using an Ansible playbook.</p>
+<p>File <cite>install_prereqs.yml</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Jenkins, Docker, Minikube, and Git</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install required dependencies</span>
+<span class="w">      </span><span class="nt">apt</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;openjdk-11-jdk&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;docker.io&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;git&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ansible&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;curl&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;apt-transport-https&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start Docker Service</span>
+<span class="w">      </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Jenkins</span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | apt-key add -</span>
+<span class="w">        </span><span class="no">echo &quot;deb http://pkg.jenkins.io/debian-stable binary/&quot; &gt; /etc/apt/sources.list.d/jenkins.list</span>
+<span class="w">        </span><span class="no">apt-get update &amp;&amp; apt-get install -y jenkins</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start Jenkins Service</span>
+<span class="w">      </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jenkins</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Minikube</span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64</span>
+<span class="w">        </span><span class="no">chmod +x minikube &amp;&amp; mv minikube /usr/local/bin/</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install kubectl</span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">curl -LO &quot;https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl&quot;</span>
+<span class="w">        </span><span class="no">chmod +x kubectl &amp;&amp; mv kubectl /usr/local/bin/</span>
+</pre></div>
+</div>
+<p>Execute the playbook:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;localhost,&quot;</span><span class="w"> </span>-c<span class="w"> </span><span class="nb">local</span><span class="w"> </span>install_prereqs.yml
+</pre></div>
+</div>
+</section>
+<section id="jenkins-configuration">
+<h2>Jenkins Configuration<a class="headerlink" href="#jenkins-configuration" title="Link to this heading"></a></h2>
+<p>Initialize Jenkins and configure it using Jenkins Configuration as Code (JCasC).</p>
+<p>File <cite>jenkins-casc.yaml</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jenkins</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">securityRealm</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">local</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">allowsSignup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">users</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
+<span class="w">          </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin123&quot;</span>
+
+<span class="w">  </span><span class="nt">authorizationStrategy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">loggedInUsersCanDoAnything</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">allowAnonymousRead</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="w">  </span><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">        </span><span class="no">folder(&#39;Whanos base images&#39;) {</span>
+<span class="w">          </span><span class="no">description(&#39;Folder for Whanos base images&#39;)</span>
+<span class="w">        </span><span class="no">}</span>
+<span class="w">        </span><span class="no">folder(&#39;Projects&#39;) {</span>
+<span class="w">          </span><span class="no">description(&#39;Folder for project jobs&#39;)</span>
+<span class="w">        </span><span class="no">}</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">        </span><span class="no">pipelineJob(&#39;link-project&#39;) {</span>
+<span class="w">          </span><span class="no">definition {</span>
+<span class="w">            </span><span class="no">cps {</span>
+<span class="w">              </span><span class="no">script(&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="no">pipeline {</span>
+<span class="w">                  </span><span class="no">agent any</span>
+<span class="w">                  </span><span class="no">parameters {</span>
+<span class="w">                    </span><span class="no">string(name: &#39;GIT_REPO&#39;, description: &#39;Git repository URL&#39;)</span>
+<span class="w">                  </span><span class="no">}</span>
+<span class="w">                  </span><span class="no">stages {</span>
+<span class="w">                    </span><span class="no">stage(&#39;Setup Project&#39;) {</span>
+<span class="w">                      </span><span class="no">steps {</span>
+<span class="w">                        </span><span class="no">echo &quot;Setting up project: ${params.GIT_REPO}&quot;</span>
+<span class="w">                      </span><span class="no">}</span>
+<span class="w">                    </span><span class="no">}</span>
+<span class="w">                  </span><span class="no">}</span>
+<span class="w">                </span><span class="no">}</span>
+<span class="w">              </span><span class="no">&quot;&quot;&quot;.stripIndent())</span>
+<span class="w">            </span><span class="no">}</span>
+<span class="w">          </span><span class="no">}</span>
+<span class="w">        </span><span class="no">}</span>
+</pre></div>
+</div>
+</section>
+<section id="docker-image-structure">
+<h2>Docker Image Structure<a class="headerlink" href="#docker-image-structure" title="Link to this heading"></a></h2>
+<p>Create the necessary Dockerfiles for building images.</p>
+<p>Example <cite>Dockerfile.base</cite> for Python:</p>
+<blockquote>
+<div><div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-m&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;app&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Directory structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>images/
+├── c/
+│   ├── Dockerfile.base
+│   ├── Dockerfile.standalone
+├── java/
+│   ├── Dockerfile.base
+│   ├── Dockerfile.standalone
+├── python/
+│   ├── Dockerfile.base
+│   ├── Dockerfile.standalone
+</pre></div>
+</div>
+</section>
+<section id="jenkins-pipeline-for-projects">
+<h2>Jenkins Pipeline for Projects<a class="headerlink" href="#jenkins-pipeline-for-projects" title="Link to this heading"></a></h2>
+<p>Create a <cite>Jenkinsfile</cite> for each project.</p>
+<p>Example:</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">agent</span><span class="w"> </span><span class="n">any</span>
+<span class="w">    </span><span class="n">stages</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Build Docker Image&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker build -t whanos-python -f images/python/Dockerfile.base .&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Push to Docker Registry&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker tag whanos-python my-docker-registry/whanos-python&#39;</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker push my-docker-registry/whanos-python&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Deploy to Kubernetes&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">when</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">fileExists</span><span class="w"> </span><span class="s1">&#39;whanos.yml&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;kubectl apply -f whanos.yml&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="kubernetes-deployment">
+<h1>Kubernetes Deployment<a class="headerlink" href="#kubernetes-deployment" title="Link to this heading"></a></h1>
+<p>Create a <cite>whanos.yml</cite> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-python-app</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-python-app</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-python-app</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python-app</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-docker-registry/whanos-python</span>
+<span class="w">        </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-and-validation">
+<h1>Testing and Validation<a class="headerlink" href="#testing-and-validation" title="Link to this heading"></a></h1>
+<ol class="arabic">
+<li><p><em>Access Jenkins</em> via <a class="reference external" href="http:/">http:/</a>/&lt;server-ip&gt;:8080 and configure a job with link-project.</p></li>
+<li><p><em>Build Docker Images</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>whanos-python<span class="w"> </span>-f<span class="w"> </span>images/python/Dockerfile.base<span class="w"> </span>.
+</pre></div>
+</div>
+</li>
+<li><p><em>Push to Docker Registry</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>push<span class="w"> </span>my-docker-registry/whanos-python
+</pre></div>
+</div>
+</li>
+<li><p><em>Kubernetes Deployment</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>whanos.yml
+</pre></div>
+</div>
+</li>
+<li><p><em>Check Pods and Services</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>get<span class="w"> </span>pods
+kubectl<span class="w"> </span>get<span class="w"> </span>services
+</pre></div>
+</div>
+</li>
+<li><p><em>Access the Application</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>minikube<span class="w"> </span>service<span class="w"> </span>&lt;service-name&gt;<span class="w"> </span>--url
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="conclusion">
+<h1>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h1>
+<p>This guide covers all steps to configure, deploy, and test a Jenkins infrastructure in compliance with the Whanos project. Each team member can reproduce this setup by following the instructions provided here</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, cynthia Zinsou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

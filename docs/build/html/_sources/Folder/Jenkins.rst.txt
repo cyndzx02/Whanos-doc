@@ -228,7 +228,7 @@ Testing and Validation
 
    .. code-block:: bash
 
-       kubectl apply -f deployment.yml
+       kubectl apply -f whanos.yml
 
 5. *Check Pods and Services*:
 
