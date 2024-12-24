@@ -18,5 +18,8 @@ This is what this project is about: we will have to combine our knowledge of the
    Folder/Whanos
    Folder/Images
    Folder/Kubernetes
+<<<<<<< HEAD
    Folder/Jenkins
+=======
+>>>>>>> 5f7f561730779c3412464777351085f0f00f749c
 
