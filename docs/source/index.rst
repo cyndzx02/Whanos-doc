@@ -18,5 +18,4 @@ This is what this project is about: we will have to combine our knowledge of the
    Folder/Whanos
    Folder/Images
    Folder/Kubernetes
-   Folder/Ansible
 
