@@ -17,16 +17,16 @@ Cluster Requirements
 
 The `whanos.yml` file contains the deployment configuration for the application. Supported properties:
 
-- **replicas** (optional):
+- **replicas** :
   - Number of pod replicas to deploy.
   - Default: 1.
 
-- **resources** (optional):
+- **resources** :
   - Resource specifications for Kubernetes pods.
   - Syntax must align with Kubernetes resource request and limit standards.
   - Example: `limits: cpu: "500m", memory: "512Mi"`.
 
-- **ports** (optional):
+- **ports** :
   - List of ports to expose.
   - Ports must be accessible from the outside world, though not necessarily on the same host port.
 
@@ -45,12 +45,6 @@ Accessing Applications
 - Applications with exposed ports must be accessible externally.
 - Port bindings on the host can differ from the container's port mappings.
 
-Best Practices
---------------
-
-- Use deployment templates to standardize configurations.
-- Follow Kubernetes' official guidelines for scalability and resource management.
-- Document any custom configurations for reproducibility.
 
 Example
 =======
